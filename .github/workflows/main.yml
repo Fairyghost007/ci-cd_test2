@@ -28,7 +28,6 @@ jobs:
               run: npm audit --audit-level=moderate
             - name: vérifie le code
               run: npm run lint
-        # On pourrait lancer des tests unitaires ici
 
     tests_backend:
         runs-on: ubuntu-latest
@@ -40,7 +39,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: installer Node.js
-              uses: actions/setup-node@v3 # défaut = LTS
+              uses: actions/setup-node@v3
               with:
                   cache: "npm"
                   cache-dependency-path: node-api/package-lock.json
@@ -55,7 +54,9 @@ jobs:
               run: npm run lint
 
             - name: vérifie les vulnérabilités
-              run: npm audit --audit-level=moderate
+              run: |
+                  cd node-api
+                  npm audit --audit-level=moderate
 
             - name: Upload du rapport de couverture sur Codecov
               uses: codecov/codecov-action@v3
@@ -102,3 +103,22 @@ jobs:
                   context: ./${{ matrix.path }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
+
+    e2e:
+        needs: [build]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Login sur GitHub Package Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Lancement des tests E2E
+              run: docker compose up --exit-code-from cypress --abort-on-container-exit
+            - name: Nettoyage
+              run: docker compose down -v --remove-orphans
