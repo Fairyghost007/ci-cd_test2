@@ -11,7 +11,7 @@ console.info(`🚀🚀 Server running on port ${port} and env is ${env} 🚀🚀
 require('./database');
 
 const app = express();
-app.use(express.static('../dist'));
+// app.use(express.static('../dist'));
 app.use(express.json());
 app.use(cookieParser());
 
