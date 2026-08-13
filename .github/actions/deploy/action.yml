@@ -10,6 +10,8 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Déploie le backend sur Render
       shell: bash
       run: curl -fsSL "${{ inputs.render_deploy_hook_url_node_api }}"
