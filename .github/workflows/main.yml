@@ -130,6 +130,8 @@ jobs:
         runs-on: ubuntu-latest
         environment: production
         steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
             - name: Déploie le backend sur Render et le frontend sur render
               uses: ./.github/actions/deploy
               with:
