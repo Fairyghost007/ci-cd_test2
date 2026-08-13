@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: node-api
+    runtime: image
+    image:
+      url: ghcr.io/fairyghost007/ci-cd_test2/node-api:latest
+    # numInstances: 3
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
+
+  - type: web
+    name: frontend
+    runtime: image
+    image:
+      url: ghcr.io/fairyghost007/ci-cd_test2/frontend:latest
+    envVars:
+      - key: PORT
+        value: "80"
+    autoDeploy: true
