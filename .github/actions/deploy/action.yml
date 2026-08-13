@@ -1,0 +1,18 @@
+name: 'Déployer sur le serveur cible'
+description: 'Effectue un déploiement sur le serveur cible'
+inputs:
+  render_deploy_hook_url_node_api:
+    description: 'URL du hook de déploiement pour le backend sur Render'
+    required: true
+  render_deploy_hook_url_frontend:
+    description: 'URL du hook de déploiement pour le frontend sur Render'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Déploie le backend sur Render
+      shell: bash
+      run: curl -fsSL "${{ inputs.render_deploy_hook_url_node_api }}"
+    - name: Déploie le frontend sur Render
+      shell: bash
+      run: curl -fsSL "${{ inputs.render_deploy_hook_url_frontend }}"
