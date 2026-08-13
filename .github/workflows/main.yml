@@ -128,6 +128,7 @@ jobs:
     deploy:
         needs: [e2e]
         runs-on: ubuntu-latest
+        environment: production
         steps:
             - name: Déploie le backend sur Render
               run: curl -fsSL "${{ secrets.RENDER_DEPLOY_HOOK_URL_NODE_API }}"
