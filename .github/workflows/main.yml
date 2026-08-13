@@ -1,8 +1,8 @@
 name: CI/CD avec images Docker et Docker Compose
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 on:
     push:
@@ -124,11 +124,12 @@ jobs:
               run: docker compose up --exit-code-from cypress --abort-on-container-exit
             - name: Nettoyage
               run: docker compose down -v --remove-orphans
-    
+
     deploy:
-        needs: e2e # Dépend des jobs "checks_frontend", "tests_backend" et "build_frontend"
-        runs-on: ubuntu-latest # Exécute sur la dernière version d'Ubuntu
+        needs: [e2e]
+        runs-on: ubuntu-latest
         steps:
-            - name: déclenche le déploiement sur Render # Appelle le Deploy Hook de Render
-              run: | # Commandes shell à exécuter
-                  curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"  # Déclenche un nouveau déploiement via l'URL secrète du service Render
+            - name: Déploie le backend sur Render
+              run: curl -fsSL "${{ secrets.RENDER_DEPLOY_HOOK_URL_NODE_API }}"
+            - name: Déploie le frontend sur Render
+              run: curl -fsSL "${{ secrets.RENDER_DEPLOY_HOOK_URL_FRONTEND }}"

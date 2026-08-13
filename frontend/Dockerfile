@@ -15,7 +15,8 @@ FROM nginx:stable-alpine
  # copy built static files from build stage
 COPY --from=build /app/dist /usr/share/nginx/html  
 # copy custom nginx config into container
-COPY nginx.conf /etc/nginx/conf.d/default.conf       
+# COPY nginx.conf /etc/nginx/conf.d/default.conf       
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 # document that container listens on port 80
 EXPOSE 80                    
  # start nginx in foreground so container stays running        
